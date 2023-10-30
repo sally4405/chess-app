@@ -9,6 +9,7 @@ import Foundation
 
 final class Board {
     private(set) var board: [Position: Piece?] = [:]
+    private(set) var point: Int = 0
 
     func initPiece(_ color: PieceColor) {
         PieceType.allCases(color).forEach { pieceType in
@@ -28,19 +29,15 @@ final class Board {
             return false
         }
 
-        if let otherPiece = getPositionInfo(destination), piece.color == otherPiece.color {
-            return false
+        if let otherPiece = getPositionInfo(destination) {
+            if piece.color == otherPiece.color { return false }
+            point += otherPiece.type.point
         }
 
-        return true
-    }
-
-    func movePiece(from arrival: Position, to destination: Position) {
-        guard canMovePiece(from: arrival, to: destination) else {
-            return
-        }
         board.updateValue(getPositionInfo(arrival), forKey: destination)
         board.removeValue(forKey: arrival)
+
+        return true
     }
 
     func getPieces(_ color: PieceColor) -> [Piece] {
