@@ -7,6 +7,7 @@
 
 import Foundation
 
+//@propertyWrapper
 struct Position: Equatable, CustomStringConvertible, Hashable {
     private(set) var rank: Rank
     private(set) var file: File
@@ -17,14 +18,23 @@ struct Position: Equatable, CustomStringConvertible, Hashable {
         self.rank = rank
         self.file = file
     }
+
+//    private var value: Int?
+//
+//    var wrappedValue: Int? {
+//        get { return value }
+//        set { value = newValue }
+//    }
 }
 
+// row
 enum Rank: Int, CaseIterable, CustomStringConvertible {
     case one = 1, two, three, four, five, six, seven, eight
 
     var description: String { return "\(self.rawValue)" }
 }
 
+// column
 enum File: String, CaseIterable {
     case A, B, C, D, E, F, G, H
 
@@ -42,9 +52,36 @@ enum File: String, CaseIterable {
 struct Action {
     var rowAction: Int
     var columnAction: Int
+    var jumpActionIsToRank: Bool?
 
-    init(rowAction: Int = 0, columnAction: Int = 0) {
+    init(rowAction: Int = 0, columnAction: Int = 0, _ jumpActionIsToRank: Bool? = nil) {
         self.rowAction = rowAction
         self.columnAction = columnAction
+        self.jumpActionIsToRank = jumpActionIsToRank
+    }
+
+    static func getContinuosAction(_ action: Action) -> [Action] {
+        var result: [Action] = []
+
+        for i in 0..<7 {
+            result.append(Action(rowAction: action.rowAction + i, columnAction: action.columnAction + i))
+        }
+        return result
     }
 }
+
+//@propertyWrapper
+//struct WrappedAction {
+//    private var rowAction: Int
+//    private var columnAction: Int
+//
+//    init(rowAction: Int = 0, columnAction: Int = 0) {
+//        self.rowAction = rowAction
+//        self.columnAction = columnAction
+//    }
+//
+//    var wrappedValue: Int {
+//        get { return rowAction }
+//        set { }
+//    }
+//}
